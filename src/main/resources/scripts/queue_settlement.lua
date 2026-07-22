@@ -16,7 +16,11 @@ redis.call('ZREM', KEYS[2], ARGV[1])
 redis.call('ZREM', KEYS[3], ARGV[1])
 redis.call('ZREM', KEYS[4], ARGV[1])
 
-redis.call('LPUSH', KEYS[5], ARGV[1])
+local payload = cjson.encode({
+    type = "SETTLEMENT",
+    auctionId = ARGV[1]
+})
+redis.call('LPUSH', KEYS[5], payload)
 
 -- Broadcast the status change to the frontend using dynamic channel
 local payload = cjson.encode({

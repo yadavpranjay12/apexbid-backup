@@ -19,20 +19,32 @@ public class DlqService {
 
     @Transactional
     public void logFailure(Long auctionId, String phase, Throwable exception) {
-
-        // Extract the true, full stack trace into a String
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);
-        String fullStackTrace = sw.toString();
-
-        FailedSettlement dlqEntry = FailedSettlement.builder()
+        failedSettlementRepository.save(FailedSettlement.builder()
                 .auctionId(auctionId)
                 .phase(phase)
-                .errorMessage(fullStackTrace)
-                .build();
+                .errorMessage(extractStackTrace(exception))
+                .build());
 
-        failedSettlementRepository.save(dlqEntry);
         log.error("CRITICAL: Auction {} failed during {}. Moved to DLQ.", auctionId, phase);
+    }
+
+    @Transactional
+    public void logWalletWorkerFailure(String requestId, String phase, Throwable exception) {
+        failedSettlementRepository.save(FailedSettlement.builder()
+                .requestId(requestId)
+                .phase(phase)
+                .errorMessage(extractStackTrace(exception))
+                .build());
+
+        log.error("CRITICAL: Request {} failed during {}. Moved to DLQ.", requestId, phase);
+    }
+
+    private String extractStackTrace(Throwable exception) {
+        if (exception == null) {
+            return "No exception provided";
+        }
+        StringWriter sw = new StringWriter();
+        exception.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
     }
 }

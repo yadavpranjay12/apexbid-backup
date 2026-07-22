@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.vaibhav.apexbid.enums.TransactionType;
+import org.vaibhav.apexbid.enums.TransactionStatus;
 
 import java.time.Instant;
 
@@ -39,7 +40,15 @@ public class Transaction {
     @Column(name = "transaction_type", nullable = false, length = 30)
     private TransactionType transactionType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    @Builder.Default
+    private TransactionStatus status = TransactionStatus.COMPLETED;
+
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Instant createdAt;
+
+    @Column(name = "request_id", unique = true)
+    private String requestId; // UUID for deposit/withdrawal idempotency
 }

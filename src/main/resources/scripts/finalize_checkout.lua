@@ -23,12 +23,16 @@ if redis.call('EXISTS', sellerWallet) == 0 then return -2 end
 local winnerBalance = tonumber(redis.call('HGET', winnerWallet, 'balance') or "0")
 if winnerBalance < remainingAmount then return -3 end
 
--- 2. Move the money atomically
+-- 2. Lock the money from the buyer atomically (seller gets paid by the worker)
 redis.call('HINCRBY', winnerWallet, 'balance', -remainingAmount)
-redis.call('HINCRBY', sellerWallet, 'balance', remainingAmount)
+redis.call('HINCRBY', winnerWallet, 'locked', remainingAmount)
 
 -- 3. Push to background worker queue
-redis.call('LPUSH', checkoutQueue, auctionId)
+local payload = cjson.encode({
+    type = "CHECKOUT",
+    auctionId = auctionId
+})
+redis.call('LPUSH', checkoutQueue, payload)
 
 -- 4. Broadcast updates to WebSockets using dynamic channel
 local wAvail = redis.call('HGET', winnerWallet, 'balance') or "0"

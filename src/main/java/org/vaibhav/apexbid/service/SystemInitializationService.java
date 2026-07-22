@@ -7,6 +7,7 @@ import org.vaibhav.apexbid.config.RedisKeysConfig;
 import org.vaibhav.apexbid.dto.AuctionRedis;
 import org.vaibhav.apexbid.enums.AuctionStatus;
 import org.vaibhav.apexbid.repository.AuctionRepository;
+import org.vaibhav.apexbid.repository.TransactionRepository;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,18 +21,28 @@ public class SystemInitializationService {
     private final AuctionRepository auctionRepository;
     private final AuctionQueryService auctionQueryService;
     private final RedisKeysConfig redisKeys;
+    private final TransactionRepository transactionRepository;
 
     public SystemInitializationService(StringRedisTemplate stringRedisTemplate,
                                        AuctionRepository auctionRepository,
                                        AuctionQueryService auctionQueryService,
-                                       RedisKeysConfig redisKeys) {
+                                       RedisKeysConfig redisKeys,
+                                       TransactionRepository transactionRepository) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.auctionRepository = auctionRepository;
         this.auctionQueryService = auctionQueryService;
         this.redisKeys = redisKeys;
+        this.transactionRepository = transactionRepository;
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void initializeClusterData() {
+        log.info("[INITIALIZATION] Cold Start: Failing stranded processing transactions...");
+        int stranded = transactionRepository.markAllPendingAsFailed();
+        if (stranded > 0) {
+            log.warn("[INITIALIZATION] Found and failed {} stranded PROCESSING transactions.", stranded);
+        }
+
         log.info("[INITIALIZATION] Cold Start: Fetching active and upcoming auctions...");
 
         List<AuctionRedis> targetAuctions = auctionRepository.findAuctionsByStatusAndStartTimeLessThanEqual(

@@ -26,13 +26,9 @@ public class RedisKeysConfig {
     private String auctionsHighestBids;
     private String auctionsMostActive;
 
-    // Settlement Phase
-    private String auctionsSettlementQueue;
-    private String auctionsSettlementProcessingZset;
-
-    // Checkout Phase
-    private String auctionsCheckoutQueue;
-    private String auctionsCheckoutProcessingZset;
+    // System Tasks
+    private String systemTaskQueue;
+    private String systemTaskProcessingZset;
 
     // Pub/Sub Channels
     private String channelAuctionUpdates;

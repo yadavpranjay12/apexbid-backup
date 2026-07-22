@@ -106,7 +106,7 @@ public class AuctionStateTransitionService {
                                 redisKeys.getAuctionsActive(),
                                 redisKeys.getAuctionsHighestBids(),
                                 redisKeys.getAuctionsMostActive(),
-                                redisKeys.getAuctionsSettlementQueue()
+                                redisKeys.getSystemTaskQueue()
                         );
 
                         stringOps.execute(queueSettlementScript, keys, auctionId, redisKeys.getChannelAuctionUpdates());

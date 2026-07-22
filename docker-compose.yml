@@ -17,7 +17,7 @@ services:
   apexbid-redis:
     image: redis:7-alpine
     container_name: apexbid-redis
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly no
     ports:
       - "6379:6379"
     volumes:

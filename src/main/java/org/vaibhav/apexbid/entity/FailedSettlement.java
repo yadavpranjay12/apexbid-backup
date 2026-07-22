@@ -17,8 +17,11 @@ public class FailedSettlement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "auction_id", nullable = false)
+    @Column(name = "auction_id")
     private Long auctionId;
+
+    @Column(name = "request_id")
+    private String requestId;
 
     // NEW: Tracks whether it failed during background sweep or user checkout
     @Column(name = "phase", nullable = false, length = 30)

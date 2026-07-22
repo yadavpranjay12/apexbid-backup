@@ -68,17 +68,21 @@ CREATE TABLE IF NOT EXISTS transactions
     auction_id       BIGINT REFERENCES auctions (id), -- NULL for DEPOSIT/WITHDRAWAL
     amount           BIGINT      NOT NULL,            -- Stored as absolute cents
     transaction_type VARCHAR(30) NOT NULL,            -- DEPOSIT, WITHDRAWAL, ESCROW_TRANSFER, FINAL_PAYMENT
-    created_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    status           VARCHAR(20) NOT NULL DEFAULT 'COMPLETED', -- PROCESSING, COMPLETED, FAILED
+    created_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    request_id       VARCHAR(36) UNIQUE               -- UUID for idempotency on deposits/withdrawals
 );
 -- Indexes for transaction history lookups
 CREATE INDEX IF NOT EXISTS idx_transactions_sender ON transactions (sender_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_receiver ON transactions (receiver_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_request_id ON transactions (request_id);
 
 CREATE TABLE IF NOT EXISTS failed_settlements
 (
     id            BIGSERIAL PRIMARY KEY,
-    auction_id    BIGINT      NOT NULL,
-    phase         VARCHAR(30) NOT NULL, -- 'SETTLEMENT' or 'CHECKOUT'
+    auction_id    BIGINT,
+    request_id    VARCHAR(36),
+    phase         VARCHAR(30) NOT NULL, -- 'SETTLEMENT', 'CHECKOUT', or 'WITHDRAWAL'
     error_message TEXT        NOT NULL,
     failed_at     TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status        VARCHAR(50) NOT NULL DEFAULT 'PENDING_REVIEW'
