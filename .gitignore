@@ -39,3 +39,4 @@ out/
 # K6 generated data
 k6/k6-data.json
 *.pem
+.env
