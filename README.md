@@ -3,9 +3,9 @@
 
 ## 1. Executive Summary
 
-ApexBid is a distributed, highly concurrent real-time auction engine built to solve the classic "sniper" problem in digital auctions. In traditional monolithic web architectures, massive spikes of concurrent users attempting to place bids in the final seconds of an auction inevitably result in race conditions, database deadlocks, and stale application state. 
+ApexBid is a distributed, highly concurrent real-time auction engine built to solve the classic "sniper" problem in digital auctions, while simultaneously eliminating counterparty risk (false/unfunded bids) through strictly enforced escrow locking. In traditional monolithic web architectures, massive spikes of concurrent users attempting to place bids in the final seconds inevitably result in race conditions, database deadlocks, and stale application state.
 
-ApexBid completely eliminates this bottleneck by bypassing the traditional relational database for live transaction validation. By leveraging a stateless Spring Boot architecture paired with a Redis in-memory execution engine, ApexBid guarantees thread-safe, atomic bid evaluations in a single network round-trip. Validated transactions are instantaneously fanned out to connected clients via STOMP WebSockets and asynchronously persisted to PostgreSQL, ensuring that the entire distributed system remains perfectly consistent without ever blocking the main execution thread.
+ApexBid completely bypasses this relational database bottleneck. By leveraging a stateless Spring Boot architecture paired with a Redis in-memory execution engine, it executes thread-safe, atomic bid evaluations and **dynamic fractional escrow locking** in a single network round-trip. This fundamentally prevents users from placing bids with funds they do not possess, and instantly auto-refunds outbid users to maintain perfect wallet liquidity. Validated transactions are instantaneously fanned out to connected clients via STOMP WebSockets and asynchronously persisted to PostgreSQL, guaranteeing absolute financial consistency without ever blocking the main execution thread.
 
 ## 2. Core Performance Metrics
 
