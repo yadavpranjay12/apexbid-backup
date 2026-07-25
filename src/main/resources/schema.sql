@@ -76,6 +76,8 @@ CREATE TABLE IF NOT EXISTS transactions
 CREATE INDEX IF NOT EXISTS idx_transactions_sender ON transactions (sender_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_receiver ON transactions (receiver_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_request_id ON transactions (request_id);
+-- Partial unique index to prevent TOCTOU race conditions on checkout
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_active_checkout ON transactions (auction_id) WHERE transaction_type = 'CHECKOUT' AND status IN ('PROCESSING', 'COMPLETED');
 
 CREATE TABLE IF NOT EXISTS failed_settlements
 (

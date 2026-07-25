@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# K6 generated data
+k6/k6-data.json

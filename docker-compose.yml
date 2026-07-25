@@ -17,12 +17,32 @@ services:
   apexbid-redis:
     image: redis:7-alpine
     container_name: apexbid-redis
-    command: redis-server --appendonly no
+    command: redis-server --appendonly no --maxmemory 256mb --maxmemory-policy noeviction
     ports:
       - "6379:6379"
     volumes:
       - redis_apexbid_data:/data
     restart: unless-stopped
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: apexbid-postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://vaibhav_admin:password@apexbid-db:5432/apexbid_db?sslmode=disable
+    ports:
+      - "9187:9187"
+    depends_on:
+      - apexbid-db
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: apexbid-redis-exporter
+    environment:
+      - REDIS_ADDR=redis://apexbid-redis:6379
+    ports:
+      - "9121:9121"
+    depends_on:
+      - apexbid-redis
 
   backend1:
     build: .
@@ -58,6 +78,7 @@ services:
       - apexbid-db
       - apexbid-redis
 
+
   nginx-proxy:
     image: nginx:stable-alpine
     container_name: apexbid-nginx
@@ -68,6 +89,32 @@ services:
     depends_on:
       - backend1
       - backend2
+
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: apexbid-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - backend1
+      - backend2
+
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: apexbid-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      - prometheus
 
 volumes:
   pg_apexbid_data:
