@@ -37,90 +37,99 @@ public class AuctionStateTransitionService {
     }
 
     public void activateUpcomingAuctions() {
-
         long nowEpoch = Instant.now().toEpochMilli();
         Set<String> toActivate = stringRedisTemplate.opsForZSet().rangeByScore(redisKeys.getAuctionsUpcoming(), 0, nowEpoch);
 
         if (toActivate != null && !toActivate.isEmpty()) {
+            List<String> listToActivate = new ArrayList<>(toActivate);
+            int batchSize = 1000;
 
-            // 1. Pipeline the Lua script executions
-            List<Object> scriptResults = stringRedisTemplate.executePipelined(new SessionCallback<>() {
-                @Override
-                @SuppressWarnings("unchecked")
-                public <K, V> Object execute(@NonNull RedisOperations<K, V> operations) {
-                    RedisOperations<String, String> stringOps = (RedisOperations<String, String>) operations;
+            for (int i = 0; i < listToActivate.size(); i += batchSize) {
+                int end = Math.min(i + batchSize, listToActivate.size());
+                List<String> batch = listToActivate.subList(i, end);
 
-                    for (String auctionId : toActivate) {
-                        List<String> keys = List.of(
-                                redisKeys.getAuctionHashPrefix() + auctionId,
-                                redisKeys.getAuctionsUpcoming(),
-                                redisKeys.getAuctionsActive(),
-                                redisKeys.getAuctionsHighestBids(),
-                                redisKeys.getAuctionsMostActive()
-                        );
-                        // FIXED: Added the dynamic channel as ARGV[2] here
-                        stringOps.execute(activateAuctionScript, keys, auctionId, redisKeys.getChannelAuctionUpdates());
+                // 1. Pipeline the Lua script executions in chunks
+                List<Object> scriptResults = stringRedisTemplate.executePipelined(new SessionCallback<>() {
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public <K, V> Object execute(@NonNull RedisOperations<K, V> operations) {
+                        RedisOperations<String, String> stringOps = (RedisOperations<String, String>) operations;
+                        for (String auctionId : batch) {
+                            List<String> keys = List.of(
+                                    redisKeys.getAuctionHashPrefix() + auctionId,
+                                    redisKeys.getAuctionsUpcoming(),
+                                    redisKeys.getAuctionsActive(),
+                                    redisKeys.getAuctionsHighestBids(),
+                                    redisKeys.getAuctionsMostActive()
+                            );
+                            stringOps.execute(activateAuctionScript, keys, auctionId, redisKeys.getChannelAuctionUpdates());
+                        }
+                        return null;
                     }
-                    return null;
+                });
+
+                // 2. Process the pipeline results
+                List<Long> auctionIdsToActivate = new ArrayList<>();
+                int index = 0;
+                for (String auctionId : batch) {
+                    Long result = (Long) scriptResults.get(index++);
+                    if (Long.valueOf(1).equals(result)) {
+                        auctionIdsToActivate.add(Long.parseLong(auctionId));
+                    }
                 }
-            });
 
-            // 2. Process the pipeline results
-            List<Long> auctionIdsToActivate = new ArrayList<>();
-            int index = 0;
-
-            for (String auctionId : toActivate) {
-                Long result = (Long) scriptResults.get(index++);
-                if (Long.valueOf(1).equals(result)) {
-                    auctionIdsToActivate.add(Long.parseLong(auctionId));
-                    log.info("[LIFECYCLE] Auction {} went LIVE atomically via Pipeline.", auctionId);
+                // 3. Sync successful transitions to PostgreSQL
+                if (!auctionIdsToActivate.isEmpty()) {
+                    auctionRepository.bulkActivateAuctions(auctionIdsToActivate);
+                    log.info("[LIFECYCLE] Synced {} auctions to ACTIVE in DB.", auctionIdsToActivate.size());
                 }
-            }
-
-            // 3. Sync successful transitions to PostgreSQL
-            if (!auctionIdsToActivate.isEmpty()) {
-                auctionRepository.bulkActivateAuctions(auctionIdsToActivate);
-                log.info("[LIFECYCLE] Synced {} auctions to ACTIVE in DB.", auctionIdsToActivate.size());
             }
         }
     }
 
     public void queueExpiredAuctions() {
-
         long nowEpoch = Instant.now().toEpochMilli();
         Set<String> toSettle = stringRedisTemplate.opsForZSet().rangeByScore(redisKeys.getAuctionsActive(), 0, nowEpoch);
 
         if (toSettle != null && !toSettle.isEmpty()) {
+            List<String> listToSettle = new ArrayList<>(toSettle);
+            int batchSize = 1000;
 
-            // 1. Open the Pipeline Buffer
-            List<Object> scriptResults = stringRedisTemplate.executePipelined(new SessionCallback<>() {
+            for (int i = 0; i < listToSettle.size(); i += batchSize) {
+                int end = Math.min(i + batchSize, listToSettle.size());
+                List<String> batch = listToSettle.subList(i, end);
 
-                @Override
-                @SuppressWarnings("unchecked")
-                public <K, V> Object execute(@NonNull RedisOperations<K, V> operations) {
-                    RedisOperations<String, String> stringOps = (RedisOperations<String, String>) operations;
-
-                    for (String auctionId : toSettle) {
-                        List<String> keys = List.of(
-                                redisKeys.getAuctionHashPrefix() + auctionId,
-                                redisKeys.getAuctionsActive(),
-                                redisKeys.getAuctionsHighestBids(),
-                                redisKeys.getAuctionsMostActive(),
-                                redisKeys.getSystemTaskQueue()
-                        );
-
-                        stringOps.execute(queueSettlementScript, keys, auctionId, redisKeys.getChannelAuctionUpdates());
+                // 1. Pipeline execution in chunks
+                List<Object> scriptResults = stringRedisTemplate.executePipelined(new SessionCallback<>() {
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public <K, V> Object execute(@NonNull RedisOperations<K, V> operations) {
+                        RedisOperations<String, String> stringOps = (RedisOperations<String, String>) operations;
+                        for (String auctionId : batch) {
+                            List<String> keys = List.of(
+                                    redisKeys.getAuctionHashPrefix() + auctionId,
+                                    redisKeys.getAuctionsActive(),
+                                    redisKeys.getAuctionsHighestBids(),
+                                    redisKeys.getAuctionsMostActive(),
+                                    redisKeys.getSystemTaskQueue()
+                            );
+                            stringOps.execute(queueSettlementScript, keys, auctionId, redisKeys.getChannelAuctionUpdates());
+                        }
+                        return null;
                     }
-                    return null;
-                }
-            });
+                });
 
-            // 2. Process the perfectly ordered results
-            int index = 0;
-            for (String auctionId : toSettle) {
-                Long result = (Long) scriptResults.get(index++);
-                if (Long.valueOf(1).equals(result)) {
-                    log.info("[LIFECYCLE] Auction {} expired. Committed to settlement queue.", auctionId);
+                // 2. Process results
+                int index = 0;
+                int count = 0;
+                for (String auctionId : batch) {
+                    Long result = (Long) scriptResults.get(index++);
+                    if (Long.valueOf(1).equals(result)) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    log.info("[LIFECYCLE] {} expired auctions committed to settlement queue.", count);
                 }
             }
         }

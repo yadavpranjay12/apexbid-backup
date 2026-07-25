@@ -40,4 +40,22 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
             @Param("statuses") List<AuctionStatus> statuses,
             @Param("startTime") Instant startTime
     );
+
+    @Query("""
+            SELECT new org.vaibhav.apexbid.dto.AuctionRedis(
+                a.id, a.title, a.auctionType, a.status, a.startPrice, a.winningBid, a.product.id,
+                s.id, s.username, w.id, w.username, a.startTime, a.endTime
+            )
+            FROM Auction a
+            JOIN a.seller s
+            LEFT JOIN a.winner w
+            WHERE a.status IN :statuses
+              AND (a.status = 'ACTIVE' OR a.startTime <= :startTime)
+            ORDER BY a.id ASC
+        """)
+    org.springframework.data.domain.Slice<AuctionRedis> findAuctionsByStatusAndStartTimeLessThanEqual(
+            @Param("statuses") List<AuctionStatus> statuses,
+            @Param("startTime") Instant startTime,
+            org.springframework.data.domain.Pageable pageable
+    );
 }

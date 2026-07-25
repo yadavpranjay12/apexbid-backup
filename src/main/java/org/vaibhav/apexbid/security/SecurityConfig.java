@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/error").permitAll()           // Anyone can log in/register
+                        .requestMatchers("/api/auth/**", "/error", "/actuator/**", "/ws/**").permitAll()           // Anyone can log in/register, Prometheus can scrape, and WS handshakes pass
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")     // Only Admins can enter here
                         .anyRequest().authenticated()                          // Everything else needs a valid JWT
                 )
