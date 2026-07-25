@@ -145,9 +145,7 @@ ApexBid is an evolving architecture. The following enterprise-grade engineering 
 * **Image CDN Integration:** While the current endpoints are highly optimized for JSON delivery, product catalog imagery requires significant bandwidth. We plan to offload all heavy static assets to a distributed Content Delivery Network (e.g., AWS CloudFront) to further protect the NGINX proxy from I/O bottlenecking.
 * **Real-Money Payment Gateways:** Bridging the gap between the internal PostgreSQL wallet ledger and external fiat payment processors (e.g., Stripe, PayPal), enabling actual financial deposits and withdrawals in production.
 
-## 10. Performance Showcase
-
-*(Screenshots of the custom Grafana observability dashboards demonstrating the system surviving 12,800+ RPS under the K6 DDoS attack)*
+## 10. Grafana Observability Dashboards
 
 ### Core Application Engine
 ![Engine Performance 1](assets/engine_1.png)
