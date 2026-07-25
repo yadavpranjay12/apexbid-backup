@@ -4,22 +4,22 @@
   "metadata": {
     "name": "ef10f8d3-017f-4f28-8eb3-4dd480baecfd",
     "namespace": "default",
-    "uid": "a807c997-a704-4bad-b88e-f0c4240ef5da",
-    "resourceVersion": "1784976959736018",
-    "generation": 4,
-    "creationTimestamp": "2026-07-25T10:38:57Z",
+    "uid": "f6661abc-a866-4a44-ac5c-9abc9eedabd5",
+    "resourceVersion": "1784995701415009",
+    "generation": 3,
+    "creationTimestamp": "2026-07-25T12:55:32Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "302996114042880"
+      "grafana.app/deprecatedInternalID": "337369799286784"
     },
     "annotations": {
       "grafana.app/createdBy": "access-policy:service",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Default Dashboards",
-      "grafana.app/sourceChecksum": "5b0aa1d5e9c15a729eb3b39c8dedb227",
+      "grafana.app/sourceChecksum": "ff421c028236265ac5aab6638c8f246c",
       "grafana.app/sourcePath": "/etc/grafana/provisioning/dashboards/redis.json",
-      "grafana.app/sourceTimestamp": "1784976954000",
+      "grafana.app/sourceTimestamp": "1784995696000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-07-25T10:55:59Z",
+      "grafana.app/updatedTimestamp": "2026-07-25T16:08:21Z",
       "grafana.app/folder": ""
     }
   },
@@ -622,7 +622,8 @@
               "fieldConfig": {
                 "defaults": {
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -631,9 +632,9 @@
                     "axisLabel": "",
                     "axisPlacement": "auto",
                     "barAlignment": 0,
-                    "barWidthFactor": 0.6,
+                    "barWidthFactor": 0.9,
                     "drawStyle": "line",
-                    "fillOpacity": 70,
+                    "fillOpacity": 0,
                     "gradientMode": "none",
                     "hideFrom": {
                       "legend": false,
@@ -642,140 +643,20 @@
                     },
                     "insertNulls": false,
                     "lineInterpolation": "linear",
-                    "lineWidth": 2,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
+                    "lineStyle": {
+                      "fill": "solid"
                     },
-                    "showPoints": "never",
-                    "showValues": false,
-                    "spanNulls": true,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "normal"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "enableFacetedFilter": false,
-                  "overflow": "ellipsis",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "13.1.1"
-          }
-        }
-      },
-      "panel-14": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "prometheus"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "expr": "topk(5, irate(redis_command_call_duration_seconds_count{addr=~\"$addr\"} [1m]))",
-                        "interval": "",
-                        "intervalFactor": 2,
-                        "legendFormat": "{{ cmd }}",
-                        "metric": "redis_command_calls_total",
-                        "step": 240
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 14,
-          "links": [],
-          "title": "Command Calls / sec",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 80,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
                     "lineWidth": 1,
-                    "pointSize": 5,
+                    "pointSize": 1,
                     "scaleDistribution": {
                       "type": "linear"
                     },
-                    "showPoints": "never",
+                    "showPoints": "always",
                     "showValues": false,
                     "spanNulls": true,
                     "stacking": {
                       "group": "A",
-                      "mode": "normal"
+                      "mode": "none"
                     },
                     "thresholdsStyle": {
                       "mode": "off"
@@ -1740,7 +1621,7 @@
                 "kind": "ElementReference",
                 "name": "panel-15"
               },
-              "height": 8,
+              "height": 7,
               "width": 12,
               "x": 0,
               "y": 7
@@ -1764,6 +1645,19 @@
             "spec": {
               "element": {
                 "kind": "ElementReference",
+                "name": "panel-7"
+              },
+              "height": 7,
+              "width": 12,
+              "x": 0,
+              "y": 14
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
                 "name": "panel-13"
               },
               "height": 7,
@@ -1777,38 +1671,12 @@
             "spec": {
               "element": {
                 "kind": "ElementReference",
-                "name": "panel-7"
-              },
-              "height": 7,
-              "width": 12,
-              "x": 0,
-              "y": 15
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-14"
-              },
-              "height": 7,
-              "width": 12,
-              "x": 12,
-              "y": 21
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
                 "name": "panel-5"
               },
               "height": 7,
               "width": 12,
               "x": 0,
-              "y": 22
+              "y": 21
             }
           },
           {
@@ -1820,8 +1688,8 @@
               },
               "height": 7,
               "width": 12,
-              "x": 0,
-              "y": 29
+              "x": 12,
+              "y": 21
             }
           }
         ]

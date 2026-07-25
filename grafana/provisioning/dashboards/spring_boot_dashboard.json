@@ -4,22 +4,20 @@
   "metadata": {
     "name": "spring_boot_21",
     "namespace": "default",
-    "uid": "c8b115f0-5d8a-4280-b9d5-863292b09fbb",
-    "resourceVersion": "1784924734539990",
-    "generation": 6,
-    "creationTimestamp": "2026-07-24T19:47:12Z",
+    "uid": "333f031b-0a5a-4165-8925-725372a035ba",
+    "resourceVersion": "1784984132614995",
+    "generation": 1,
+    "creationTimestamp": "2026-07-25T12:55:32Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "78582996893696"
+      "grafana.app/deprecatedInternalID": "337369962864640"
     },
     "annotations": {
       "grafana.app/createdBy": "access-policy:service",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Default Dashboards",
-      "grafana.app/sourceChecksum": "94f3c808004844e914d2d79e156d810e",
+      "grafana.app/sourceChecksum": "10efaa4188bead953ddcc889e5270298",
       "grafana.app/sourcePath": "/etc/grafana/provisioning/dashboards/spring_boot_dashboard.json",
-      "grafana.app/sourceTimestamp": "1784924729000",
-      "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-07-24T20:25:34Z",
+      "grafana.app/sourceTimestamp": "1784983911000",
       "grafana.app/folder": ""
     }
   },
@@ -259,122 +257,6 @@
                     ]
                   },
                   "unit": "ops"
-                },
-                "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "enableFacetedFilter": false,
-                  "overflow": "ellipsis",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "13.1.1"
-          }
-        }
-      },
-      "panel-102": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "expr": "sum(rate(http_server_requests_seconds_count{status=~\"5..\", instance=~\"$instance\"}[1m])) or vector(0)",
-                        "legendFormat": "500 Errors/sec"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 102,
-          "links": [],
-          "title": "API Error Rate (5xx)",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 10,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "auto",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "reqps"
                 },
                 "overrides": []
               },
@@ -3187,122 +3069,6 @@
           }
         }
       },
-      "panel-98": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "expr": "sum(tomcat_websocket_connections_active_current{instance=~\"$instance\"}) or vector(0)",
-                        "legendFormat": "Active Users"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 98,
-          "links": [],
-          "title": "WebSocket Connections Over Time",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 10,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "auto",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "short"
-                },
-                "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "enableFacetedFilter": false,
-                  "overflow": "ellipsis",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "13.1.1"
-          }
-        }
-      },
       "panel-99": {
         "kind": "Panel",
         "spec": {
@@ -3453,7 +3219,7 @@
                           "name": "panel-58"
                         },
                         "height": 8,
-                        "width": 6,
+                        "width": 5,
                         "x": 6,
                         "y": 0
                       }
@@ -3466,8 +3232,21 @@
                           "name": "panel-60"
                         },
                         "height": 8,
-                        "width": 6,
-                        "x": 12,
+                        "width": 5,
+                        "x": 11,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-68"
+                        },
+                        "height": 8,
+                        "width": 8,
+                        "x": 16,
                         "y": 0
                       }
                     },
@@ -3529,7 +3308,7 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-98"
+                          "name": "panel-99"
                         },
                         "height": 8,
                         "width": 12,
@@ -3542,7 +3321,7 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-99"
+                          "name": "panel-103"
                         },
                         "height": 8,
                         "width": 12,
@@ -3575,32 +3354,6 @@
                         "x": 12,
                         "y": 8
                       }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-102"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 0,
-                        "y": 16
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-103"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 12,
-                        "y": 16
-                      }
                     }
                   ]
                 }
@@ -3611,7 +3364,7 @@
           {
             "kind": "RowsLayoutRow",
             "spec": {
-              "collapse": true,
+              "collapse": false,
               "layout": {
                 "kind": "GridLayout",
                 "spec": {
@@ -3670,25 +3423,12 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-68"
-                        },
-                        "height": 8,
-                        "width": 8,
-                        "x": 16,
-                        "y": 24
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
                           "name": "panel-76"
                         },
                         "height": 10,
                         "width": 12,
                         "x": 12,
-                        "y": 32
+                        "y": 24
                       }
                     }
                   ]
@@ -4091,6 +3831,5 @@
         }
       }
     ]
-  },
-  "title": "ApexBid | Core Application Engine"
+  }
 }

@@ -12,7 +12,7 @@ const users = data.jwts;
 export const options = {
   stages: [
     { duration: '30s', target: 50 },  // Slowly ramp to 50 concurrent connections
-    { duration: '1m', target: 50 },   // Hold at 50
+    { duration: '30m', target: 50 },   // Hold at 50
     { duration: '15s', target: 0 },    // Disconnect everyone
   ],
 };
