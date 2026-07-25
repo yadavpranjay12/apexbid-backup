@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SpringBootTest(properties = {
     "JWT_SECRET=fqLyNKs25Wae8P5m8IqtQfpeggAK5QIx8X6sB2kriAQ=",
@@ -93,7 +94,8 @@ public class LoadTestSeeder {
             auction.setWinningBid(100L);
             auction.setStartTime(Instant.now().minusSeconds(10));
             // 50% end in 1 minute (within test), 50% end in 4 minutes (after test)
-            auction.setEndTime(i % 2 == 0 ? Instant.now().plusSeconds(600) : Instant.now().plusSeconds(900)); 
+            int randomDurationSeconds = ThreadLocalRandom.current().nextInt(300, 3601);
+            auction.setEndTime(Instant.now().plusSeconds(randomDurationSeconds));
             auction.setStatus(AuctionStatus.UPCOMING);
             auction = auctionRepository.save(auction);
             

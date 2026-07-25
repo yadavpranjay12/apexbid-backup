@@ -36,7 +36,7 @@
     }
   ],
   "id": null,
-  "title": "Redis Cache & Message Broker",
+  "title": "ApexBid | Redis Cache & Message Broker",
   "description": "Prometheus dashboard for Redis servers",
   "tags": [
     "prometheus",

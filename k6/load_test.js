@@ -14,7 +14,7 @@ export const options = {
       executor: 'constant-arrival-rate',
       rate: 5000, // Attempt exactly 5,000 requests per second
       timeUnit: '1s',
-      duration: '2m',
+      duration: '10m',
       preAllocatedVUs: 50, // Start with 50 threads
       maxVUs: 200,         // Cap at 200 to prevent CPU meltdown on localhost
     },

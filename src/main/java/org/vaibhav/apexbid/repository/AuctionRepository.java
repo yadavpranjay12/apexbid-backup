@@ -1,6 +1,8 @@
 package org.vaibhav.apexbid.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -53,9 +55,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
               AND (a.status = 'ACTIVE' OR a.startTime <= :startTime)
             ORDER BY a.id ASC
         """)
-    org.springframework.data.domain.Slice<AuctionRedis> findAuctionsByStatusAndStartTimeLessThanEqual(
+    Slice<AuctionRedis> findAuctionsByStatusAndStartTimeLessThanEqual(
             @Param("statuses") List<AuctionStatus> statuses,
             @Param("startTime") Instant startTime,
-            org.springframework.data.domain.Pageable pageable
+            Pageable pageable
     );
 }

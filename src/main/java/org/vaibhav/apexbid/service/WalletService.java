@@ -1,6 +1,7 @@
 package org.vaibhav.apexbid.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.http.HttpStatus;
@@ -114,7 +115,7 @@ public class WalletService {
                 .build();
         try {
             transactionRepository.saveAndFlush(transaction);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Duplicate deposit request");
         }
 
@@ -158,7 +159,7 @@ public class WalletService {
         
         try {
             transactionRepository.saveAndFlush(pendingTx);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             return ResponseEntity.accepted().body(Map.of("status", "Withdrawal processing"));
         }
 

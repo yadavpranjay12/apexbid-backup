@@ -3885,7 +3885,7 @@
       "timezone": "browser",
       "to": "now"
     },
-    "title": "Spring Boot 3.x Statistics",
+    "title": "ApexBid | Core Application Engine",
     "variables": [
       {
         "kind": "QueryVariable",
@@ -4091,5 +4091,6 @@
         }
       }
     ]
-  }
+  },
+  "title": "ApexBid | Core Application Engine"
 }
