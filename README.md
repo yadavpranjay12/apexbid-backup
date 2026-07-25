@@ -143,7 +143,7 @@ ApexBid is an evolving architecture. The following enterprise-grade engineering 
 
 * **React SPA Frontend:** Developing a fully decoupled, rich Single Page Application using React. The frontend will natively manage the STOMP WebSocket connections to visualize massive, real-time auction data streams instantly in the browser.
 * **Image CDN Integration:** While the current endpoints are highly optimized for JSON delivery, product catalog imagery requires significant bandwidth. We plan to offload all heavy static assets to a distributed Content Delivery Network (e.g., AWS CloudFront) to further protect the NGINX proxy from I/O bottlenecking.
-* **Real-Money Payment Gateways:** Bridging the gap between the internal PostgreSQL wallet ledger and external fiat payment processors (e.g., Stripe, PayPal), enabling actual financial deposits and withdrawals in production.
+* **Real-Money Payment Gateways:** Bridging the gap between the internal PostgreSQL wallet ledger and external fiat payment processors (e.g., Stripe,UPI, PayPal), enabling actual financial deposits and withdrawals in production.
 
 ## 10. Grafana Observability Dashboards
 
