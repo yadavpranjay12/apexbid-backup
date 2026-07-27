@@ -46,18 +46,18 @@ FROM products;
 -- 4. SEED AUCTIONS
 INSERT INTO auctions (id, title, auction_type, status, start_price, winning_bid, product_id, seller_id, winner_id,
                       start_time, end_time)
-VALUES (1001, 'RTX 5090 Midnight Drop', 'ANTI_SNIPE', 'ACTIVE', 150000, NULL, 201, 1, NULL, '2026-05-18T15:00:00Z',
-        '2026-05-19T03:00:00Z'),
-       (1002, 'Travis Scott Fragment AJ1', 'STANDARD', 'ACTIVE', 120000, NULL, 203, 2, NULL, '2026-05-18T17:00:00Z',
-        '2026-05-18T19:45:00Z'),
-       (1003, 'MacBook Pro M5 Max Overkill', 'STANDARD', 'UPCOMING', 350000, NULL, 202, 1, NULL, '2026-05-18T19:15:00Z',
-        '2026-05-19T01:15:00Z'),
+VALUES (1001, 'RTX 5090 Midnight Drop', 'ANTI_SNIPE', 'ACTIVE', 150000, NULL, 201, 1, NULL, '2026-07-27T15:00:00Z',
+        '2026-07-28T03:00:00Z'),
+       (1002, 'Travis Scott Fragment AJ1', 'STANDARD', 'ACTIVE', 120000, NULL, 203, 2, NULL, '2026-07-27T17:00:00Z',
+        '2026-07-28T19:45:00Z'),
+       (1003, 'MacBook Pro M5 Max Overkill', 'STANDARD', 'UPCOMING', 350000, NULL, 202, 1, NULL, '2026-07-27T20:15:00Z',
+        '2026-07-28T01:15:00Z'),
        (1004, 'Rolex Submariner Gold Edition', 'ANTI_SNIPE', 'UPCOMING', 950000, NULL, 204, 2, NULL,
-        '2026-05-18T19:23:00Z', '2026-05-19T02:23:00Z'),
-       (1005, 'Sony PS6 Developer Kit', 'ANTI_SNIPE', 'UPCOMING', 500000, NULL, 205, 1, NULL, '2026-05-20T12:00:00Z',
-        '2026-05-21T12:00:00Z'),
-       (1006, 'Lightning Test Auction', 'STANDARD', 'UPCOMING', 50000, NULL, 206, 2, NULL, '2026-05-18T19:41:00Z',
-        '2026-05-18T19:42:00Z')
+        '2026-07-27T20:23:00Z', '2026-07-28T02:23:00Z'),
+       (1005, 'Sony PS6 Developer Kit', 'ANTI_SNIPE', 'UPCOMING', 500000, NULL, 205, 1, NULL, '2026-07-28T12:00:00Z',
+        '2026-07-29T12:00:00Z'),
+       (1006, 'Lightning Test Auction', 'STANDARD', 'UPCOMING', 50000, NULL, 206, 2, NULL, '2026-07-27T19:45:00Z',
+        '2026-07-27T19:46:00Z')
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('auctions', 'id'), COALESCE(MAX(id), 1))

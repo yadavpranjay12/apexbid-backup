@@ -1,7 +1,6 @@
 package org.vaibhav.apexbid;
 
 import tools.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,7 +43,7 @@ public class LoadTestSeeder {
     @Autowired private RedisKeysConfig redisKeys;
 
     @Test
-    void seedK6Data() throws Exception {
+    void seedK6Data() {
         System.out.println("Seeding Database for k6 Load Test...");
 
         // 1. Create Seller
@@ -81,6 +80,8 @@ public class LoadTestSeeder {
         for (int i = 0; i < 10; i++) {
             Product product = new Product();
             product.setName("k6 Hype Item " + i);
+            product.setDescription("Description for Product " + i);
+            product.setImageUrl("https://picsum.photos/200/300?random=" + i);
             product.setSecretCode("SECRET_K6_" + i);
             product.setSeller(seller);
             product = productRepository.save(product);
@@ -105,13 +106,22 @@ public class LoadTestSeeder {
             stringRedisTemplate.opsForZSet().add(redisKeys.getAuctionsUpcoming(), String.valueOf(auction.getId()), auction.getStartTime().toEpochMilli());
             
             String auctionKey = redisKeys.getAuctionHashPrefix() + auction.getId();
-            stringRedisTemplate.opsForHash().putAll(auctionKey, Map.of(
-                "status", "UPCOMING",
-                "end_time", String.valueOf(auction.getEndTime().toEpochMilli()),
-                "start_price", String.valueOf(auction.getStartPrice()),
-                "auction_type", auction.getAuctionType().name(),
-                "seller_id", String.valueOf(seller.getId())
-            ));
+            Map<String, String> auctionData = new HashMap<>();
+            auctionData.put("id", String.valueOf(auction.getId()));
+            auctionData.put("title", auction.getTitle());
+            auctionData.put("auction_type", auction.getAuctionType().name());
+            auctionData.put("status", "UPCOMING");
+            auctionData.put("start_price", String.valueOf(auction.getStartPrice()));
+            auctionData.put("product_id", String.valueOf(product.getId()));
+            auctionData.put("seller_id", String.valueOf(seller.getId()));
+            auctionData.put("seller_username", seller.getUsername());
+            auctionData.put("start_time", String.valueOf(auction.getStartTime().toEpochMilli()));
+            auctionData.put("end_time", String.valueOf(auction.getEndTime().toEpochMilli()));
+            auctionData.put("winning_bid", String.valueOf(auction.getWinningBid()));
+            auctionData.put("winner_id", "");
+            auctionData.put("winner_username", "");
+
+            stringRedisTemplate.opsForHash().putAll(auctionKey, auctionData);
         }
 
         // Activate them!

@@ -104,7 +104,7 @@ The repository includes three intensive integration tests designed to verify rac
 
 Execute the internal test suite using the Integration flag:
 ```bash
-./gradlew test -PrunIntegration
+./gradlew clean test -PrunIntegration
 ```
 
 ### Phase 2: K6 Data Seeding
@@ -112,7 +112,7 @@ Before unleashing the K6 network tests, the live database must be populated with
 
 Run the `LoadTestSeeder`:
 ```bash
-./gradlew test --tests "org.vaibhav.apexbid.LoadTestSeeder" -PrunIntegration
+./gradlew clean test --tests "org.vaibhav.apexbid.LoadTestSeeder" -PrunIntegration
 ```
 *(This automatically provisions the mock universe and outputs the `k6/k6-data.json` payload file required by the attack nodes).*
 
