@@ -11,8 +11,8 @@ ApexBid completely bypasses this relational database bottleneck. By leveraging a
 
 ApexBid is engineered for extreme concurrency and low-latency throughput, designed to scale infinitely across distributed networks.
 
-* **Core Execution Speed:** **35 microseconds (µs)** per atomic bid evaluation via Redis Lua scripting, yielding a theoretical single-shard processing limit of **~28,500 RPS** before requiring Redis clustering.
-* **Sustained Throughput:** Effectively handled **12,500+ HTTP Requests Per Second (RPS)** per lightweight node. The full Docker cluster (including databases and observability) was hosted on a single **AWS EC2 `m7i-flex.large`** instance. This 12.8k RPS figure was strictly bottlenecked by the CPU limitations of the hardware, not the application itself. Because the backend is entirely stateless, total throughput scales linearly with horizontal hardware provisioning.
+* **Core Execution Speed:** **35 microseconds (µs)** per atomic bid evaluation via Redis Lua scripting, yielding a theoretical single-shard processing limit of **~28,500 Bids** before requiring Redis clustering.
+* **Sustained Throughput:** Effectively handled **12,500+ Bids (RPS)** per lightweight node. The full Docker cluster (including databases and observability) was hosted on a single **AWS EC2 `m7i-flex.large`** instance. This 12.8k RPS figure was strictly bottlenecked by the CPU limitations of the hardware, not the application itself. Because the backend is entirely stateless, total throughput scales linearly with horizontal hardware provisioning.
 * **Real-Time WebSocket Fan-Out:** Architected to effortlessly support **100,000+ concurrent STOMP WebSocket connections**. Redis Pub/Sub integration guarantees instantaneous, synchronized state broadcasts to all connected clients globally with zero degradation.
 * **End-to-End Latency:** **6.8ms median latency**, ensuring instantaneous UI feedback regardless of traffic volume.
 * **Flawless Fault Tolerance:** **100% transaction success rate** and zero dropped connections when subjected to continuous, high-intensity traffic floods.
