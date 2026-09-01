@@ -1,7 +1,7 @@
 # ApexBid
 **Distributed, Stateless Real-Time Auction Engine**
 
-## 1. Executive Summary
+## 1. Summary
 
 ApexBid is a distributed, highly concurrent real-time auction engine built to solve the classic "sniper" problem in digital auctions, while simultaneously eliminating counterparty risk (false/unfunded bids) through strictly enforced escrow locking. In traditional monolithic web architectures, massive spikes of concurrent users attempting to place bids in the final seconds inevitably result in race conditions, database deadlocks, and stale application state.
 
